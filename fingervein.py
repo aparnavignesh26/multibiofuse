@@ -41,5 +41,27 @@ preprocessed_dataset = np.vstack(preprocessed_images)
 
 # Save the preprocessed dataset
 np.save('preprocessed_dataset.npy', preprocessed_dataset)
+import matplotlib.pyplot as plt
 
+# Load the preprocessed dataset
+preprocessed_dataset = np.load('preprocessed_dataset.npy')
 
+# Choose a random index to visualize an image
+random_index = np.random.randint(12, preprocessed_dataset.shape[0])
+
+# Visualize the original and preprocessed images
+original_image = preprocessed_dataset[random_index]  # The original image before preprocessing
+preprocessed_image = preprocessed_dataset[random_index]  # The preprocessed image
+
+plt.figure(figsize=(10, 5))
+
+plt.subplot(1, 2, 1)
+plt.imshow(original_image)
+plt.title('Original Image')
+
+plt.subplot(1, 2, 2)
+plt.imshow(preprocessed_image)
+plt.title('Preprocessed Image')
+
+plt.tight_layout()
+plt.show()
