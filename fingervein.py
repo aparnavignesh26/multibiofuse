@@ -65,3 +65,113 @@ plt.title('Preprocessed Image')
 
 plt.tight_layout()
 plt.show()
+
+import numpy as np
+import cv2
+import os
+import matplotlib.pyplot as plt
+# Load the preprocessed dataset
+preprocessed_dataset = np.load('preprocessed_dataset.npy')
+
+# Calculate basic statistics of the dataset
+num_images = preprocessed_dataset.shape[0]
+image_shape = preprocessed_dataset.shape[1:]
+
+print("Number of images:", num_images)
+print("Image shape:", image_shape)
+
+# Display a random sample of images
+num_samples = 10
+sample_indices = np.random.randint(0, num_images, num_samples)
+
+plt.figure(figsize=(15, 5))
+for i, idx in enumerate(sample_indices):
+    plt.subplot(1, num_samples, i+1)
+    plt.imshow(preprocessed_dataset[idx], cmap='gray')
+    plt.title(f"Image {idx}")
+    plt.axis('off')
+plt.show()
+
+# Calculate and display the average pixel values of the dataset
+average_pixel_values = np.mean(preprocessed_dataset, axis=(0, 1, 2))
+print("Average pixel values:", average_pixel_values)
+
+# Plot a histogram of pixel values
+plt.figure(figsize=(10, 6))
+plt.hist(preprocessed_dataset.flatten(), bins=50, color='c')
+plt.xlabel('Pixel Value')
+plt.ylabel('Frequency')
+plt.title('Pixel Value Distribution')
+plt.show()
+
+# Load the preprocessed dataset
+preprocessed_dataset = np.load('preprocessed_dataset.npy')
+
+def display_samples_with_grayscale(num_samples):
+    # Choose random image indices to visualize
+    random_indices = np.random.randint(0, preprocessed_dataset.shape[0], num_samples)
+
+    plt.figure(figsize=(15, 8))
+    for i, random_index in enumerate(random_indices):
+        # Select the image to process
+        image_to_process = preprocessed_dataset[random_index]
+
+        # Convert the image to grayscale
+        gray_image = cv2.cvtColor(image_to_process, cv2.COLOR_RGB2GRAY)
+
+        plt.subplot(num_samples, 2, i * 2 + 1)
+        plt.imshow(image_to_process)
+        plt.title(f'Original Image {random_index}')
+        plt.axis('off')
+
+        plt.subplot(num_samples, 2, i * 2 + 2)
+        plt.imshow(gray_image, cmap='gray')
+        plt.title('Grayscale Image')
+        plt.axis('off')
+
+    plt.tight_layout()
+    plt.show()
+
+# Specify the number of samples to display
+num_samples = 5
+
+# Display the samples with grayscale images
+display_samples_with_grayscale(num_samples)
+
+from skimage.feature import local_binary_pattern
+import numpy as np
+import cv2
+import os
+
+# Load the preprocessed dataset
+preprocessed_dataset = np.load('preprocessed_dataset.npy')
+
+# Initialize an empty list to store LBP images
+lbp_images = []
+
+# Calculate LBP features for each preprocessed image
+for image in preprocessed_dataset:
+    gray_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    radius = 1
+    n_points = 8 * radius
+    lbp_image = local_binary_pattern(gray_image, n_points, radius, method='uniform')
+    lbp_images.append(lbp_image)
+
+# Convert the list of LBP images to a NumPy array
+lbp_dataset = np.array(lbp_images)
+
+# Save the LBP dataset
+np.save('lbp_dataset.npy', lbp_dataset)
+
+import numpy as np
+from sklearn.model_selection import train_test_split
+
+# Load the preprocessed dataset
+preprocessed_dataset = np.load('preprocessed_dataset.npy')
+
+# Assuming the labels are in a separate array (adjust as needed)
+labels = np.load('lbp_dataset.npy')
+
+# Split data into training and testing sets (80% training, 20% testing)
+X_train, X_test, y_train, y_test = train_test_split(
+    preprocessed_dataset, labels, test_size=0.2, random_state=42)
