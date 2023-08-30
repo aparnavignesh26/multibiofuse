@@ -165,13 +165,56 @@ np.save('lbp_dataset.npy', lbp_dataset)
 
 import numpy as np
 from sklearn.model_selection import train_test_split
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
 
-# Load the preprocessed dataset
+# Load the preprocessed dataset and labels
 preprocessed_dataset = np.load('preprocessed_dataset.npy')
-
-# Assuming the labels are in a separate array (adjust as needed)
 labels = np.load('lbp_dataset.npy')
 
-# Split data into training and testing sets (80% training, 20% testing)
+# Reshape the labels to have the same dimensions as the images
+reshaped_labels = labels.reshape(labels.shape[0], labels.shape[1], labels.shape[2], 1)
+
 X_train, X_test, y_train, y_test = train_test_split(
-    preprocessed_dataset, labels, test_size=0.2, random_state=42)
+    preprocessed_dataset, reshaped_labels, test_size=0.2, random_state=42)
+
+# Print the shapes to confirm
+print("X_train shape:", X_train.shape)
+print("y_train shape:", y_train.shape)
+print("X_test shape:", X_test.shape)
+print("y_test shape:", y_test.shape)
+from tensorflow.keras.layers import Reshape
+
+# Create the CNN model
+model = Sequential([
+    Conv2D(32, (3, 3), activation='relu', input_shape=(224, 224, 3)),
+    MaxPooling2D((2, 2)),
+    Conv2D(64, (3, 3), activation='relu'),
+    MaxPooling2D((2, 2)),
+    Conv2D(128, (3, 3), activation='relu'),
+    MaxPooling2D((2, 2)),
+    Flatten(),
+    Dense(128, activation='relu'),
+    Dense(224 * 224, activation='sigmoid'),  # Adjust the output shape to match (batch_size, 224, 224, 1)
+    Reshape((224, 224, 1))  # Reshape to match the desired output shape
+])
+
+# Compile the model
+model.compile(optimizer='adam',
+              loss='binary_crossentropy',  # Use 'binary_crossentropy' for binary classification
+              metrics=['accuracy'])
+
+# Print model summary
+model.summary()
+
+# Train the model
+batch_size = 32
+epochs = 10
+history = model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, validation_data=(X_test, y_test))
+# Print the training and validation accuracy
+train_accuracy = history.history['accuracy']
+val_accuracy = history.history['val_accuracy']
+
+print("Training Accuracy:", train_accuracy[-1])
+print("Validation Accuracy:", val_accuracy[-1])
