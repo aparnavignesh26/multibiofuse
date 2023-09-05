@@ -5,9 +5,9 @@ import numpy as np
 # Define the path to the directory containing your image dataset
 dataset_dir = 'C:/Users/Vignesh Sundararajan/Desktop/Project/Dataset/edited/fp'
 
-# Create lists to store image data and labels (if applicable)
+# Create lists to store image data and labels 
 image_data = []
-labels = []  # Optional: If your dataset has labels or categories
+labels = [] 
 
 # Loop through the directory and load BMP image files
 for root, _, files in os.walk(dataset_dir):
@@ -16,9 +16,7 @@ for root, _, files in os.walk(dataset_dir):
             image_path = os.path.join(root, file)
             image = cv2.imread(image_path)
             if image is not None:
-                # Resize the image if needed (e.g., to a fixed size)
-                # image = cv2.resize(image, (width, height))
-
+               
                 image_data.append(image)
                 labels.append(os.path.basename(root))  # Store the folder name as the label
 
@@ -40,7 +38,7 @@ for i, idx in enumerate(sample_indices):
 
 plt.show()
 
-# Check image dimensions (assuming all images have the same dimensions)
+
 height, width, channels = image_data[0].shape
 print(f"Image dimensions: Height={height}, Width={width}, Channels={channels}")
 
@@ -181,3 +179,24 @@ print(f"Recall: {recall:.2f}")
 print(f"F1-Score: {f1:.2f}")
 print("Confusion Matrix:")
 print(conf_matrix)
+
+
+# Plot Accuracy-Loss curve (assuming you have 'history' available from model training)
+plt.figure(figsize=(12, 4))
+plt.subplot(1, 2, 1)
+plt.plot(history.history['accuracy'], label='Training Accuracy')
+plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.legend()
+plt.title('Training and Validation Accuracy Over Epochs')
+
+plt.subplot(1, 2, 2)
+plt.plot(history.history['loss'], label='Training Loss')
+plt.plot(history.history['val_loss'], label='Validation Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+plt.title('Training and Validation Loss Over Epochs')
+
+plt.show()
