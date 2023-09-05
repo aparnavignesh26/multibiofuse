@@ -8,9 +8,8 @@ import cv2
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from tensorflow.keras.models import load_model
-fingerprint_model = load_model('fingerprint_model.h5')  # Replace with your fingerprint model
-finger_vein_model = load_model('vein_model.h5')  # Replace with your finger vein model
-
+fingerprint_model = load_model('fingerprint_model.h5')  
+finger_vein_model = load_model('vein_model.h5') 
 fingerprint_image_path = 'C:/Users/Vignesh Sundararajan/Desktop/Project/Dataset/edited/fp/1/1__M_Left_index_finger.BMP'
 finger_vein_image_path = 'C:/Users/Vignesh Sundararajan/Desktop/Project/Dataset/edited/desiredfv/001/L_Fore/01.bmp'
 
@@ -21,7 +20,7 @@ def preprocess_fingerprint(fingerprint_image_path):
         print("Warning: Failed to load or empty fingerprint image.")
         return None
 
-    # Resize the fingerprint image to the desired size (e.g., 224x224)
+    # Resize the fingerprint image to the desired size 
     image = cv2.resize(fingerprint_image_path, (100, 100))
    
     # Normalize pixel values to the range [0, 1]
@@ -57,7 +56,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 def calculate_similarity(features1, features2):
     # Calculate the similarity score between two sets of features
-    # Example: Use cosine similarity
+    # Use cosine similarity
     similarity_score = cosine_similarity(features1, features2)[0][0]
     return similarity_score
 def bimodal_identification(fingerprint_image_path, finger_vein_image_path):
@@ -96,9 +95,8 @@ from tensorflow.keras.models import load_model
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Load pre-trained models for face and finger vein recognition
-face_model = load_model('face_model.h5')  # Replace with your face recognition model
-finger_vein_model = load_model('vein_model.h5')  # Replace with your finger vein model
-
+face_model = load_model('face_model.h5')  
+finger_vein_model = load_model('vein_model.h5') 
 face_image_path = 'C:/Users/Vignesh Sundararajan/Desktop/Project/Dataset/edited/facenew/Aaron_Patterson/Aaron_Patterson_0001.jpg'  # Replace with your face image path
 finger_vein_image_path = 'C:/Users/Vignesh Sundararajan/Desktop/Project/Dataset/edited/desiredfv/001/L_Fore/01.bmp'  # Replace with your finger vein image path
 
@@ -138,7 +136,7 @@ def bimodal_identification(face_image_path, finger_vein_image_path):
     face_features = face_model.predict(np.expand_dims(face_image, axis=0))
     finger_vein_features = finger_vein_model.predict(np.expand_dims(finger_vein_image, axis=0))
 
-    # Calculate similarity score between features (e.g., cosine similarity)
+    # Calculate similarity score between features 
     similarity_score = cosine_similarity(face_features, finger_vein_features)[0][0]
 
     return similarity_score
@@ -165,11 +163,11 @@ if similarity_score is not None:
 import cv2
 import numpy as np
 from tensorflow.keras.models import load_model
-from sklearn.metrics.pairwise import cosine_similarity  # You may need to install scikit-learn
+from sklearn.metrics.pairwise import cosine_similarity  
 
 # Load pre-trained models for each modality
-fingerprint_model = load_model('fingerprint_model.h5')  # Replace with your fingerprint model
-facial_model = load_model('face_model.h5')  # Replace with your facial recognition model
+fingerprint_model = load_model('fingerprint_model.h5')  
+facial_model = load_model('face_model.h5')  
 
 # Paths to test images for both fingerprint and face
 fingerprint_image_path = 'C:/Users/Vignesh Sundararajan/Desktop/Project/Dataset/edited/fp/1/1__M_Left_index_finger.BMP'
@@ -182,7 +180,7 @@ def preprocess_fingerprint(fingerprint_image_path):
         print("Warning: Failed to load or empty fingerprint image.")
         return None
 
-    # Resize the fingerprint image to the desired size (e.g., 100x100)
+    # Resize the fingerprint image to the desired size
     image = cv2.resize(fingerprint_image_path, (100, 100))
 
     # Normalize pixel values to the range [0, 1]
@@ -195,7 +193,7 @@ def preprocess_fingerprint(fingerprint_image_path):
 
 def preprocess_facial(facial_image_path):
     if facial_image_path is None or facial_image_path.size == 0:
-        # Handle the case where the image loading fails or it's empty
+        # case where the image loading fails or it's empty
         print("Warning: Failed to load or empty facial image.")
         return None
 
