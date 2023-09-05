@@ -1,14 +1,12 @@
 import numpy as np
 import cv2
 import os
-from google.colab import drive
-
-# Mount Google Drive
-drive.mount('/content/drive')
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-# Define the path to the directory containing the mmcbnu_6000 dataset on Google Drive
-dataset_path = '/content/drive/MyDrive/MMCBNU_6000/MMCBNU_6000/MMCBNU_6000'
+
+# Path to the directory
+dataset_path = 'C:/Users/Vignesh Sundararajan/Desktop/Project/Dataset/edited/desiredfv'
+
 
 # Create an instance of ImageDataGenerator with pixel value rescaling
 datagen = ImageDataGenerator(rescale=1./255)
@@ -19,7 +17,7 @@ data_generator = datagen.flow_from_directory(
         target_size=(224, 224),  # Resize images to 224x224 pixels
         batch_size=32,        # Number of images in each batch
         class_mode='binary',  # Binary classification problem (two classes)
-        shuffle=False)        # Ensure that images are not shuffled
+        shuffle=False)        # images are not shuffled
 
 # Initialize an empty list to store the preprocessed images
 preprocessed_images = []
@@ -162,6 +160,19 @@ lbp_dataset = np.array(lbp_images)
 
 # Save the LBP dataset
 np.save('lbp_dataset.npy', lbp_dataset)
+# Load the LBP dataset
+lbp_dataset = np.load('lbp_dataset.npy')
+
+# Choose an example LBP image to visualize (you can change the index)
+example_image = lbp_dataset[0]
+
+# Display the original LBP image
+plt.figure(figsize=(6, 6))
+plt.imshow(example_image, cmap='gray')
+plt.title('Example LBP Image')
+plt.axis('off')
+plt.show()
+
 
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -218,3 +229,28 @@ val_accuracy = history.history['val_accuracy']
 
 print("Training Accuracy:", train_accuracy[-1])
 print("Validation Accuracy:", val_accuracy[-1])
+# Evaluate the model on the test data
+test_loss, test_accuracy = model.evaluate(X_test_resized, y_test_resized)
+
+# Print the test accuracy
+print("Test Accuracy:", test_accuracy)
+
+# Plot the training and validation loss over epochs
+plt.figure(figsize=(10, 5))
+plt.plot(history.history['loss'], label='Training Loss')
+plt.plot(history.history['val_loss'], label='Validation Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+plt.title('Training and Validation Loss Over Epochs')
+plt.show()
+
+# Plot the training and validation accuracy over epochs
+plt.figure(figsize=(10, 5))
+plt.plot(history.history['accuracy'], label='Training Accuracy')
+plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.legend()
+plt.title('Training and Validation Accuracy Over Epochs')
+plt.show()
