@@ -54,9 +54,6 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 
-# Load your dataset and perform any required preprocessing to obtain X and y
-
-# Assuming you already have X, y, X_train, X_test, y_train, and y_test defined
 
 # Preprocessing: Crop and Resize
 def preprocess_image(image, target_size=(100, 100)):
