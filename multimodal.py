@@ -10,9 +10,9 @@ import cv2
 from sklearn.metrics.pairwise import cosine_similarity
 from tensorflow.keras.models import load_model
 
-fingerprint_model = load_model('fingerprint_model.h5')  # Replace with your fingerprint model
-finger_vein_model = load_model('vein_model.h5')  # Replace with your finger vein model
-face_model = load_model('face_model.h5')  # Replace with your face recognition model
+fingerprint_model = load_model('fingerprint_model.h5')  
+finger_vein_model = load_model('vein_model.h5') 
+face_model = load_model('face_model.h5') 
 
 face_image_path = 'C:/Users/Vignesh Sundararajan/Desktop/Project/Dataset/edited/facenew/Aaron_Patterson/Aaron_Patterson_0001.jpg' 
 fingerprint_image_path = 'C:/Users/Vignesh Sundararajan/Desktop/Project/Dataset/edited/fp/1/1__M_Left_index_finger.BMP'
@@ -27,7 +27,7 @@ def preprocess_fingerprint(fingerprint_image_path):
         print(f"Warning: Failed to load or empty fingerprint image at path: {fingerprint_image_path}")
         return None
 
-    # Resize the fingerprint image to the desired size (e.g., 100x100)
+    # Resize the fingerprint image to the desired size
     image = cv2.resize(image, (100, 100))
    
     # Normalize pixel values to the range [0, 1]
@@ -90,7 +90,7 @@ def extract_features(image, model):
     features = model.predict(np.expand_dims(image, axis=0))
     return features
 
-# Extract features for each modality (you may use different feature extraction methods)
+# Extract features for each modality 
 face_features = [extract_features(face_images, face_model)]
 vein_features = [extract_features(vein_images, vein_model)]
 fingerprint_features = [extract_features(fingerprint_images, fingerprint_model)]
@@ -100,7 +100,7 @@ face_matching_scores = pairwise_distances(face_features, test_face_features, met
 vein_matching_scores = pairwise_distances(vein_features, test_vein_features, metric='cosine')
 fingerprint_matching_scores = pairwise_distances(fingerprint_features, test_fingerprint_features, metric='cosine')
 
-# Fusion: Combine matching scores from each modality (e.g., simple average fusion)
+# Fusion: Combine matching scores from each modality 
 combined_scores = (face_matching_scores + vein_matching_scores + fingerprint_matching_scores) / 3
 
 # Set a threshold for matching decision
@@ -116,7 +116,7 @@ matches = combined_scores < threshold
 import numpy as np
 from sklearn.metrics import accuracy_score
 
-# Generate example similarity scores for each modality (replace with your actual scores)
+
 face_scores = np.random.rand(100)
 vein_scores = np.random.rand(100)
 fingerprint_scores = np.random.rand(100)
@@ -125,12 +125,9 @@ fingerprint_scores = np.random.rand(100)
 threshold = 0.5
 
 # Create ground truth labels for genuine and impostor pairs
-genuine_labels = np.ones(100)  # All pairs are genuine
-impostor_labels = np.zeros(100)  # All pairs are impostor
+genuine_labels = np.ones(100)  
+impostor_labels = np.zeros(100) 
 
-# Concatenate scores from different modalities (you can use fusion methods here)
-# For example, you can take the maximum, minimum, average, or any other fusion method
-# Here, we'll use the average of scores as an example fusion method
 fusion_scores = (face_scores + vein_scores + fingerprint_scores) / 3
 
 # Combine ground truth labels for genuine and impostor pairs
